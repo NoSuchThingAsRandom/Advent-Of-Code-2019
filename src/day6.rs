@@ -1,5 +1,5 @@
-use std::fs;
 use std::collections::HashMap;
+use std::fs;
 
 #[derive(Debug)]
 struct Orbit {
@@ -7,7 +7,11 @@ struct Orbit {
     planet: String,
 }
 
-fn count(current_depth: usize, current_planet: &String, orbits: &HashMap<String, Vec<String>>) -> usize {
+fn count(
+    current_depth: usize,
+    current_planet: &String,
+    orbits: &HashMap<String, Vec<String>>,
+) -> usize {
     match orbits.get(current_planet) {
         Some(children) => {
             let mut total: usize = children.len() + children.len() * current_depth;
@@ -16,7 +20,7 @@ fn count(current_depth: usize, current_planet: &String, orbits: &HashMap<String,
             }
             total
         }
-        None => 0
+        None => 0,
     }
 }
 
@@ -35,7 +39,11 @@ fn create_children(orbits: Vec<Orbit>) -> HashMap<String, Vec<String>> {
     children
 }
 
-fn get_path_from_com(current_position: &String, target: &String, orbits: &HashMap<String, Vec<String>>) -> Option<Vec<String>> {
+fn get_path_from_com(
+    current_position: &String,
+    target: &String,
+    orbits: &HashMap<String, Vec<String>>,
+) -> Option<Vec<String>> {
     if current_position == target {
         return Some(Vec::new());
     }
@@ -60,20 +68,23 @@ fn get_path_from_com(current_position: &String, target: &String, orbits: &HashMa
             }
             return None;
         }
-        None => return None
+        None => return None,
     }
 }
 
-
-fn calculate_orbital_transfer(start: String, end: String, orbits: &HashMap<String, Vec<String>>) -> usize {
-    let mut me = match get_path_from_com(&String::from("COM"), &String::from("YOU"), &orbits) {
+fn calculate_orbital_transfer(
+    start: String,
+    end: String,
+    orbits: &HashMap<String, Vec<String>>,
+) -> usize {
+    let mut me = match get_path_from_com(&String::from("COM"), &start, &orbits) {
         Some(x) => x,
-        None => panic!("YOU IS NOT FOUND!")
+        None => panic!("YOU IS NOT FOUND!"),
     };
     me.reverse();
-    let mut santa = match get_path_from_com(&String::from("COM"), &String::from("SAN"), &orbits) {
+    let mut santa = match get_path_from_com(&String::from("COM"), &end, &orbits) {
         Some(x) => x,
-        None => panic!("SANTA IS NOT FOUND!")
+        None => panic!("SANTA IS NOT FOUND!"),
     };
     santa.reverse();
     for position in 0..me.len() {
@@ -83,7 +94,9 @@ fn calculate_orbital_transfer(start: String, end: String, orbits: &HashMap<Strin
             if planet == &me[position] {
                 intercept = true;
                 break;
-            } else { index += 1; }
+            } else {
+                index += 1;
+            }
         }
         if intercept {
             println!("Intercept: {}", me[position]);
@@ -93,7 +106,10 @@ fn calculate_orbital_transfer(start: String, end: String, orbits: &HashMap<Strin
     0
 }
 
-fn display_orbits(current_position: &String, orbits: &HashMap<String, Vec<String>>) -> Vec<Vec<String>> {
+fn display_orbits(
+    current_position: &String,
+    orbits: &HashMap<String, Vec<String>>,
+) -> Vec<Vec<String>> {
     let mut rows: Vec<Vec<String>> = Vec::new();
     rows.push(Vec::new());
     match orbits.get(current_position) {
@@ -101,33 +117,33 @@ fn display_orbits(current_position: &String, orbits: &HashMap<String, Vec<String
             let mut index = 0;
             for element in children {
                 rows[0].push(element.clone());
-                for x in 1..rows.len(){
+                for x in 1..rows.len() {
                     rows[x].push(String::from(" "));
                 }
-                let mut depth=1;
-                let mut index_increase=1;
+                let mut depth = 1;
+                let mut index_increase = 1;
                 for child_row in display_orbits(element, orbits) {
-                    while rows.len()<1+depth {
+                    while rows.len() < 1 + depth {
                         let new_row = vec![String::from(" "); rows[0].len()];
                         rows.push(new_row);
                     }
-                    let mut planet_index=0;
-                    if index_increase<child_row.len(){
-                        index_increase=child_row.len();
+                    let mut planet_index = 0;
+                    if index_increase < child_row.len() {
+                        index_increase = child_row.len();
                     }
 
                     for planet in &child_row {
-                        if rows[0].len()<index+child_row.len() {
+                        if rows[0].len() < index + child_row.len() {
                             for x in 0..rows.len() {
                                 rows[x].push(String::from(" "));
                             }
                         }
-                        rows[depth][index+planet_index] = String::from(planet);
-                        planet_index+=1;
+                        rows[depth][index + planet_index] = String::from(planet);
+                        planet_index += 1;
                     }
-                    depth+=1;
+                    depth += 1;
                 }
-                index+=index_increase;
+                index += index_increase;
             }
         }
         None => {}
@@ -142,18 +158,22 @@ pub fn start() {
     let mut data: Vec<Orbit> = Vec::new();
     for element in contents {
         let split: Vec<&str> = element.split(")").collect();
-        data.push(Orbit { base: split[0].to_string(), planet: split[1].to_string() });
+        data.push(Orbit {
+            base: split[0].to_string(),
+            planet: split[1].to_string(),
+        });
     }
     let orbits = create_children(data);
     //println!("{:?}",orbits);
-    for data in display_orbits(&String::from("COM"), &orbits){
+    /*    for data in display_orbits(&String::from("COM"), &orbits){
         for element in data{
             print!("    {}",element);
         }
         print!("\n");
-
-    }
+    }*/
     println!("Total Orbits: {}", count(0, &"COM".to_string(), &orbits));
-    println!("Orbital Transfer Length: {}", calculate_orbital_transfer(String::from("YOU"), String::from("SAN"), &orbits));
+    println!(
+        "Orbital Transfer Length: {}",
+        calculate_orbital_transfer(String::from("YOU"), String::from("SAN"), &orbits)
+    );
 }
-

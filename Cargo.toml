@@ -3,7 +3,7 @@ name = "Advent-Of-Code-2019"
 version = "0.1.0"
 authors = ["Sam <>"]
 edition = "2018"
-
+#![allow(dead_code)]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]

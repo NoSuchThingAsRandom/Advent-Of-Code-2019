@@ -22,23 +22,21 @@ impl Computer {
         args.push(opcode % 10);
         opcode = opcode / 10;
         for arg_count in 2..opcode_length {
-            args.push(
-                if opcode % 10 == 0 {//Position mode
-                    self.memory[self.memory[index + arg_count - 1] as usize]
-                } else {
-                    self.memory[index + arg_count - 1]
-                }
-            );
+            args.push(if opcode % 10 == 0 {
+                //Position mode
+                self.memory[self.memory[index + arg_count - 1] as usize]
+            } else {
+                self.memory[index + arg_count - 1]
+            });
             opcode = opcode / 10;
         }
-        let required_number =
-            match args[0] {
-                1 | 2 | 7 | 8 => 4,
-                4 => 3,
-                5 | 6 => 4,
-                9 => 1,
-                _ => 2
-            };
+        let required_number = match args[0] {
+            1 | 2 | 7 | 8 => 4,
+            4 => 3,
+            5 | 6 => 4,
+            9 => 1,
+            _ => 2,
+        };
         let mut count = args.len() - 1;
         while args.len() < required_number {
             args.push(self.memory[self.memory[index + count] as usize]);
@@ -48,11 +46,10 @@ impl Computer {
         args
     }
 
-
     fn execute_program(&mut self) -> isize {
         let mut finished = false;
         let mut index: usize = 0;
-        let mut got_phase=false;
+        let mut got_phase = false;
         while (index as usize) < self.memory.len() && !finished {
             //print!("\nIndex {}, ", index);
             ////print!("Data [{}, {}, {}, {}]  ", self.memory[index], self.memory[index + 1], self.memory[index + 2], self.memory[index + 3]);
@@ -75,18 +72,18 @@ impl Computer {
                 // INPUT
                 3 => {
                     let result = self.memory[index + 1] as usize;
-                    if got_phase{
+                    if got_phase {
                         self.memory[result] = self.input_value;
-                    }else {
+                    } else {
                         self.memory[result] = self.phase_number;
-                        got_phase=true;
+                        got_phase = true;
                     }
                     index += 2
                 }
                 4 => {
                     //println!("    \nOUTPUT: {}\n", args[2]);
-                    index += 2;
-                    return args[2]
+                    //index += 2;
+                    return args[2];
                 }
                 // OUTPUT
                 // JUMP IF TRUE
@@ -137,31 +134,37 @@ impl Computer {
         -1
     }
 
-    pub fn start(&mut self) ->isize{
+    pub fn start(&mut self) -> isize {
         self.load_data();
         self.execute_program()
     }
 }
-fn get_highest(filename:String,input_value:isize)->isize{
-    println!("INput {}",input_value);
-    let mut max_value=0;
-    let mut phase_value=0;
-    for phase in 0..5{
-        let new_value:isize=Computer{initial_file:String::from(filename.clone()), memory:Vec::new(),phase_number:phase,input_value }.start();
-        if new_value>max_value{
-            max_value=new_value;
-            phase_value=phase;
+fn get_highest(filename: String, input_value: isize) -> isize {
+    println!("INput {}", input_value);
+    let mut max_value = 0;
+    let mut phase_value = 0;
+    for phase in 0..5 {
+        let new_value: isize = Computer {
+            initial_file: String::from(filename.clone()),
+            memory: Vec::new(),
+            phase_number: phase,
+            input_value,
+        }
+        .start();
+        if new_value > max_value {
+            max_value = new_value;
+            phase_value = phase;
         }
     }
-    println!("Highest {} with phase {}",max_value,phase_value);
+    println!("Highest {} with phase {}", max_value, phase_value);
     max_value
 }
 
 pub fn start() {
     let filename = "data/test-07-C";
-    let code="109,99,21101,0,13,0,203,1,203,2,1105,1,16,204,1,99,1205,1,26,22101,1,2,1,2105,1,0,1205,2,40,22101,-1,1,1,21101,0,1,2,1105,1,16,21101,0,57,3,22101,0,1,4,22101,-1,2,5,109,3,1105,1,16,109,-3,22101,0,4,2,22101,-1,1,1,1105,1,16";
-    let mut input=0;
-    for x in 0..5 {
-        input=get_highest(String::from(filename), input);
+    //let code="109,99,21101,0,13,0,203,1,203,2,1105,1,16,204,1,99,1205,1,26,22101,1,2,1,2105,1,0,1205,2,40,22101,-1,1,1,21101,0,1,2,1105,1,16,21101,0,57,3,22101,0,1,4,22101,-1,2,5,109,3,1105,1,16,109,-3,22101,0,4,2,22101,-1,1,1,1105,1,16";
+    let mut input = 0;
+    for _x in 0..5 {
+        input = get_highest(String::from(filename), input);
     }
 }

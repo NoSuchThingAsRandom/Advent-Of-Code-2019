@@ -1,6 +1,5 @@
 use std::fs;
 
-
 fn get_arguments(instructions: &Vec<isize>, index: &usize, mut opcode: isize) -> Vec<isize> {
     let opcode_length = opcode.to_string().len();
     let mut args: Vec<isize> = Vec::new();
@@ -9,23 +8,21 @@ fn get_arguments(instructions: &Vec<isize>, index: &usize, mut opcode: isize) ->
     args.push(opcode % 10);
     opcode = opcode / 10;
     for arg_count in 2..opcode_length {
-        args.push(
-            if opcode % 10 == 0 {//Position mode
-                instructions[instructions[index + arg_count - 1] as usize]
-            } else {
-                instructions[index + arg_count - 1]
-            }
-        );
+        args.push(if opcode % 10 == 0 {
+            //Position mode
+            instructions[instructions[index + arg_count - 1] as usize]
+        } else {
+            instructions[index + arg_count - 1]
+        });
         opcode = opcode / 10;
     }
-    let required_number =
-        match args[0] {
-            1 | 2 | 7 | 8 => 4,
-            4 =>3,
-            5 | 6 => 4,
-            9 => 1,
-            _ => 2
-        };
+    let required_number = match args[0] {
+        1 | 2 | 7 | 8 => 4,
+        4 => 3,
+        5 | 6 => 4,
+        9 => 1,
+        _ => 2,
+    };
     let mut count = args.len() - 1;
     while args.len() < required_number {
         args.push(instructions[instructions[index + count] as usize]);
@@ -34,7 +31,6 @@ fn get_arguments(instructions: &Vec<isize>, index: &usize, mut opcode: isize) ->
     //print!(" Args: {:?}", args);
     args
 }
-
 
 fn execute_program_immediate_mode(mut instructions: Vec<isize>) -> isize {
     let mut finished = false;
@@ -74,16 +70,16 @@ fn execute_program_immediate_mode(mut instructions: Vec<isize>) -> isize {
             5 => {
                 if args[2] != 0 {
                     index = args[3] as usize;
-                }else{
-                    index+=3;
+                } else {
+                    index += 3;
                 }
             }
             // JUMP IF FALSE
             6 => {
                 if args[2] == 0 {
                     index = args[3] as usize;
-                }else{
-                    index+=3;
+                } else {
+                    index += 3;
                 }
             }
             // LESS THAN
@@ -123,7 +119,7 @@ pub fn start() {
     //let filename = "data/test-05-B";
     let raw_contents = fs::read_to_string(filename).expect("Failed to read file!");
     let contents = raw_contents.trim().split(",");
-    let mut data: Vec<isize> = contents.map(|x| x.parse().unwrap()).collect();
+    let data: Vec<isize> = contents.map(|x| x.parse().unwrap()).collect();
     //data[1] = 12;
     //data[2] = 2;
     ////println!("{:?}", data);
