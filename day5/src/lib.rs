@@ -32,7 +32,7 @@ fn get_arguments(instructions: &Vec<isize>, index: &usize, mut opcode: isize) ->
     args
 }
 
-fn execute_program_immediate_mode(mut instructions: Vec<isize>) -> isize {
+fn execute_program_immediate_mode(mut instructions: Vec<isize>, input: isize) -> isize {
     let mut finished = false;
     let mut index: usize = 0;
     while (index as usize) < instructions.len() && !finished {
@@ -58,12 +58,15 @@ fn execute_program_immediate_mode(mut instructions: Vec<isize>) -> isize {
             3 => {
                 //print!("    INPUT REQUIRED");
                 let result = instructions[index + 1] as usize;
-                instructions[result] = 5;
+                instructions[result] = input;
                 index += 2
             }
             // OUTPUT
             4 => {
-                println!("    \nOUTPUT: {}\n", args[2]);
+                //println!("    \nOUTPUT: {}\n", args[2]);
+                if args[2] != 0 {
+                    return args[2];
+                }
                 index += 2;
             }
             // JUMP IF TRUE
@@ -114,15 +117,16 @@ fn execute_program_immediate_mode(mut instructions: Vec<isize>) -> isize {
     instructions[0]
 }
 
-pub fn start() {
-    let filename = "data/input-05";
-    //let filename = "data/test-05-B";
+pub fn start(filename: String) {
     let raw_contents = fs::read_to_string(filename).expect("Failed to read file!");
     let contents = raw_contents.trim().split(",");
     let data: Vec<isize> = contents.map(|x| x.parse().unwrap()).collect();
-    //data[1] = 12;
-    //data[2] = 2;
-    ////println!("{:?}", data);
-    let _result = execute_program_immediate_mode(data.clone());
-    ////println!("{}", result)
+    println!(
+        "Part 1: {}",
+        execute_program_immediate_mode(data.clone(), 1)
+    );
+    println!(
+        "Part 2: {}",
+        execute_program_immediate_mode(data.clone(), 5)
+    );
 }

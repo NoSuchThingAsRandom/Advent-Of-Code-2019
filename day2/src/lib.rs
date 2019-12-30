@@ -1,7 +1,6 @@
 use std::fs;
 
-pub fn start() {
-    let filename = "data/input-02";
+pub fn start(filename: String) {
     let raw_contents = fs::read_to_string(filename).expect("Failed to read file!");
     let contents = raw_contents.trim().split(",");
     let data: Vec<usize> = contents.map(|x| x.parse().unwrap()).collect();
@@ -9,7 +8,12 @@ pub fn start() {
     for noun in 0..99 {
         for verb in 0..99 {
             if execute_program(data.clone(), noun, verb) == 19690720 {
-                println!("Noun {},  Verb {}, Output {}", noun, verb, (100 * noun) + verb);
+                println!(
+                    "Noun {},  Verb {}, Output {}",
+                    noun,
+                    verb,
+                    (100 * noun) + verb
+                );
             }
         }
     }

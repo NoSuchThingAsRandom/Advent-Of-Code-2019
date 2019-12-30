@@ -151,8 +151,16 @@ fn display_orbits(
     rows
 }
 
-pub fn start() {
-    let filename = "data/input-06";
+pub fn output_orbits(orbits: HashMap<String, Vec<String>>) {
+    for data in display_orbits(&String::from("COM"), &orbits) {
+        for element in data {
+            print!("    {}", element);
+        }
+        print!("\n");
+    }
+}
+
+pub fn start(filename: String) {
     let raw_contents = fs::read_to_string(filename).expect("Failed to read file!");
     let contents = raw_contents.trim().split("\n");
     let mut data: Vec<Orbit> = Vec::new();
@@ -164,13 +172,6 @@ pub fn start() {
         });
     }
     let orbits = create_children(data);
-    //println!("{:?}",orbits);
-    /*    for data in display_orbits(&String::from("COM"), &orbits){
-        for element in data{
-            print!("    {}",element);
-        }
-        print!("\n");
-    }*/
     println!("Total Orbits: {}", count(0, &"COM".to_string(), &orbits));
     println!(
         "Orbital Transfer Length: {}",

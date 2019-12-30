@@ -5,6 +5,12 @@ name = "Advent-Of-Code-2019"
 version = "0.1.0"
 dependencies = [
  "criterion 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "day2 0.1.0",
+ "day3 0.1.0",
+ "day5 0.1.0",
+ "day6 0.1.0",
+ "day7 0.1.0",
+ "day9 0.1.0",
 ]
 
 [[package]]
@@ -160,6 +166,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "day2"
+version = "0.1.0"
+
+[[package]]
+name = "day3"
+version = "0.1.0"
+
+[[package]]
+name = "day5"
+version = "0.1.0"
+
+[[package]]
+name = "day6"
+version = "0.1.0"
+
+[[package]]
+name = "day7"
+version = "0.1.0"
+dependencies = [
+ "intcode 0.1.0",
+]
+
+[[package]]
+name = "day9"
+version = "0.1.0"
+dependencies = [
+ "intcode 0.1.0",
+]
+
+[[package]]
 name = "either"
 version = "1.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -181,6 +217,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "libc 0.2.66 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
+
+[[package]]
+name = "intcode"
+version = "0.1.0"
 
 [[package]]
 name = "itertools"
