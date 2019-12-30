@@ -9,13 +9,14 @@ pub struct Computer {
 
 impl Computer {
     fn get_arguments(&mut self, index: &usize, mut opcode: isize) -> Vec<usize> {
-        let mut args: Vec<usize> = Vec::new();
-        args.push((opcode % 10) as usize);
+        let mut args: Vec<usize> = vec![0; 5];
+        args[0] = ((opcode % 10) as usize);
         opcode = opcode / 10;
-        args.push((opcode % 10) as usize);
+        args[1] = ((opcode % 10) as usize);
         opcode = opcode / 10;
-        for arg_count in 2..5 {
-            args.push(if opcode % 10 == 0 {
+        let mut arg_count = 2;
+        while opcode >= 1 {
+            args[arg_count] = (if opcode % 10 == 0 {
                 //Position mode
                 self.memory[index + arg_count - 1] as usize
             } else if opcode % 10 == 1 {
@@ -28,8 +29,20 @@ impl Computer {
                 0
             });
             opcode = opcode / 10;
+            arg_count += 1;
         }
-
+        //For missing arguments in presumed position mode e.g. opcode "1"
+        let required_number = match args[0] {
+            1 | 2 | 7 | 8 => 5,
+            3 | 4 => 3,
+            5 | 6 => 4,
+            9 => 3,
+            _ => 2,
+        };
+        while arg_count < required_number {
+            args[arg_count] = (self.memory[index + arg_count - 1] as usize);
+            arg_count += 1;
+        }
         args
     }
 
