@@ -1,5 +1,4 @@
 #![allow(dead_code)]
-
 fn main() {
     /*    println!("\n\nDay6:");
     day9::start();*/
@@ -17,7 +16,7 @@ fn main() {
     println!("\n\nDay7:");
     day7::start(String::from("data/input-07"));
     println!("\n\nDay8:");
-    day8::start(String::from("data/input-07"));
+    day8::start(String::from("data/input-08"), 25, 6);
     println!("\n\nDay9:");
     day9::start(String::from("data/input-09"));
 }
