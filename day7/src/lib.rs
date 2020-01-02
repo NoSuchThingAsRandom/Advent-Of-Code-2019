@@ -1,8 +1,6 @@
 use permutohedron::Heap;
 use std::collections::VecDeque;
 use std::fs;
-use std::intrinsics::transmute;
-
 fn calculate_phase_result(filename: &String, phase: Vec<isize>, input: isize) -> isize {
     let mut input_value = input;
     for phase_value in phase {
@@ -15,9 +13,9 @@ fn calculate_phase_result(filename: &String, phase: Vec<isize>, input: isize) ->
             ),
             memory_size: 0,
             relative_base: 0,
-            inputs,exit_on_output:false
+            inputs, //exit_on_output:false
         }
-            .start();
+        .start();
     }
     input_value
 }
@@ -37,7 +35,6 @@ fn part_a(filename: &String) {
     println!("Phase {:?} produced {}", phase, max_value);
 }
 
-
 fn part_b(filename: &String) {
     let mut data = vec![5, 6, 7, 8, 9];
     let heap = Heap::new(&mut data);
@@ -55,7 +52,7 @@ fn part_b(filename: &String) {
 
 fn part_b_calculate(filename: &String, phase: Vec<isize>, input: isize) -> isize {
     println!("Starting");
-    let mut input_value=input;
+    let mut input_value = input;
     let mut amps: Vec<intcode::computer::Computer> = Vec::new();
     for x in 0..phase.len() {
         let mut inputs = VecDeque::new();
@@ -68,29 +65,28 @@ fn part_b_calculate(filename: &String, phase: Vec<isize>, input: isize) -> isize
             memory_size: 0,
             relative_base: 0,
             inputs,
-            exit_on_output:true
+            //exit_on_output:true
         });
-        input_value=amps[x].start();
+        input_value = amps[x].start();
     }
     println!("Starting");
-    let mut count=0;
+    let mut count = 0;
     loop {
-        count+=1;
-        for amp in &mut amps{
+        count += 1;
+        for amp in &mut amps {
             let mut inputs = VecDeque::new();
             inputs.push_back(input_value);
             amp.update_inputs(inputs);
-            input_value=amp.start();
-
+            input_value = amp.start();
         }
-        println!("{}",input_value);
-        if count==20{
-            break
+        println!("{}", input_value);
+        if count == 20 {
+            break;
         }
     }
     input_value
 }
 
 pub fn start(filename: String) {
-    part_b(&filename);
+    part_a(&filename);
 }

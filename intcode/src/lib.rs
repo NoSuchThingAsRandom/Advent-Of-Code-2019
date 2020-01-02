@@ -68,11 +68,11 @@ pub mod computer {
                     }
                     // INPUT
                     3 => {
-                        //print!("    INPUT REQUIRED");
                         self.memory[args[2]] = match self.inputs.pop_front() {
                             Some(val) => val,
                             _ => 0,
                         } as i64;
+                        //println!("    INPUT REQUIRED {}",self.memory[args[2]]);
                         index += 2;
                     }
                     // OUTPUT
@@ -141,6 +141,9 @@ pub mod computer {
             }
             self.execute_program()
         }
+        pub fn update_inputs(&mut self, inputs: VecDeque<isize>) {
+            self.inputs = inputs;
+        }
     }
 
     pub fn load_data(raw_contents: String) -> Vec<i64> {
@@ -158,6 +161,7 @@ pub fn sum_of_primes() {
         memory_size: 100000,
         relative_base: 0,
         inputs,
+        //exit_on_output: false,
     }
     .start();
 }
@@ -171,6 +175,7 @@ pub fn prime_factor_small() {
         memory_size: 50340,
         relative_base: 0,
         inputs,
+        //exit_on_output: false,
     }
     .start();
 }
@@ -184,6 +189,7 @@ pub fn prime_factor_big() {
         memory_size: 140569,
         relative_base: 0,
         inputs,
+        //exit_on_output: false,
     }
     .start();
 }

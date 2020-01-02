@@ -1,13 +1,5 @@
 #![allow(dead_code)]
 
-use day2;
-use day3;
-use day5;
-use day6;
-use day7;
-
-//pub mod day9;
-
 fn main() {
     /*    println!("\n\nDay6:");
     day9::start();*/
@@ -24,6 +16,8 @@ fn main() {
     day6::start(String::from("data/input-06"));
     println!("\n\nDay7:");
     day7::start(String::from("data/input-07"));
+    println!("\n\nDay8:");
+    day8::start(String::from("data/input-07"));
     println!("\n\nDay9:");
     day9::start(String::from("data/input-09"));
 }
