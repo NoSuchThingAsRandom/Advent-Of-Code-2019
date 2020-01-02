@@ -1,38 +1,96 @@
+use permutohedron::Heap;
 use std::collections::VecDeque;
 use std::fs;
+use std::intrinsics::transmute;
 
-use intcode::computer;
-
-fn get_highest(filename: &String, input_value: isize) -> isize {
-    let mut max_value = 0;
-    let mut phase_value = 0;
-    for phase in 0..5 {
+fn calculate_phase_result(filename: &String, phase: Vec<isize>, input: isize) -> isize {
+    let mut input_value = input;
+    for phase_value in phase {
         let mut inputs = VecDeque::new();
-        inputs.push_back(phase);
+        inputs.push_back(phase_value.clone());
+        inputs.push_back(input_value.clone());
+        input_value = intcode::computer::Computer {
+            memory: intcode::computer::load_data(
+                fs::read_to_string(String::from(filename)).expect("Failed to read file"),
+            ),
+            memory_size: 0,
+            relative_base: 0,
+            inputs,exit_on_output:false
+        }
+            .start();
+    }
+    input_value
+}
+
+fn part_a(filename: &String) {
+    let mut data = vec![0, 1, 2, 3, 4];
+    let heap = Heap::new(&mut data);
+    let mut max_value = 0;
+    let mut phase = vec![0; 5];
+    for data in heap {
+        let result = calculate_phase_result(&filename, data.clone(), 0);
+        if result > max_value {
+            max_value = result;
+            phase = data;
+        }
+    }
+    println!("Phase {:?} produced {}", phase, max_value);
+}
+
+
+fn part_b(filename: &String) {
+    let mut data = vec![5, 6, 7, 8, 9];
+    let heap = Heap::new(&mut data);
+    let mut max_value = 0;
+    let mut phase = vec![0; 5];
+    for data in heap {
+        let result = part_b_calculate(&filename, data.clone(), 0);
+        if result > max_value {
+            max_value = result;
+            phase = data;
+        }
+    }
+    println!("Phase {:?} produced {}", phase, max_value);
+}
+
+fn part_b_calculate(filename: &String, phase: Vec<isize>, input: isize) -> isize {
+    println!("Starting");
+    let mut input_value=input;
+    let mut amps: Vec<intcode::computer::Computer> = Vec::new();
+    for x in 0..phase.len() {
+        let mut inputs = VecDeque::new();
+        inputs.push_back(phase[x]);
         inputs.push_back(input_value);
-        let new_value: isize = intcode::computer::Computer {
+        amps.push(intcode::computer::Computer {
             memory: intcode::computer::load_data(
                 fs::read_to_string(String::from(filename)).expect("Failed to read file"),
             ),
             memory_size: 0,
             relative_base: 0,
             inputs,
+            exit_on_output:true
+        });
+        input_value=amps[x].start();
+    }
+    println!("Starting");
+    let mut count=0;
+    loop {
+        count+=1;
+        for amp in &mut amps{
+            let mut inputs = VecDeque::new();
+            inputs.push_back(input_value);
+            amp.update_inputs(inputs);
+            input_value=amp.start();
+
         }
-        .start();
-        if new_value > max_value {
-            max_value = new_value;
-            phase_value = phase;
+        println!("{}",input_value);
+        if count==20{
+            break
         }
     }
-    println!("Highest {} with phase {}", max_value, phase_value);
-    max_value
+    input_value
 }
 
 pub fn start(filename: String) {
-    //let code="109,99,21101,0,13,0,203,1,203,2,1105,1,16,204,1,99,1205,1,26,22101,1,2,1,2105,1,0,1205,2,40,22101,-1,1,1,21101,0,1,2,1105,1,16,21101,0,57,3,22101,0,1,4,22101,-1,2,5,109,3,1105,1,16,109,-3,22101,0,4,2,22101,-1,1,1,1105,1,16";
-    let mut input = 1;
-    for _x in 0..5 {
-        input = get_highest(&filename, input);
-        //println!("{}", input);
-    }
+    part_b(&filename);
 }
