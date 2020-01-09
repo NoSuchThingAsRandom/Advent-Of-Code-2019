@@ -1,6 +1,8 @@
-use permutohedron::Heap;
 use std::collections::VecDeque;
 use std::fs;
+
+use permutohedron::Heap;
+
 fn calculate_phase_result(filename: &String, phase: Vec<isize>, input: isize) -> isize {
     let mut input_value = input;
     for phase_value in phase {

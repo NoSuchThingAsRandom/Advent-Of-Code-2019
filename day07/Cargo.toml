@@ -1,5 +1,5 @@
 [package]
-name = "day9"
+name = "day07"
 version = "0.1.0"
 authors = ["Sam <a>"]
 edition = "2018"
@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 intcode ={path="../intcode"}
+permutohedron = "0.2.4"

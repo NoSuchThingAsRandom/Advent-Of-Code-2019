@@ -5,13 +5,14 @@ name = "advent-of-code-2019"
 version = "0.1.0"
 dependencies = [
  "criterion 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "day2 0.1.0",
- "day3 0.1.0",
- "day5 0.1.0",
- "day6 0.1.0",
- "day7 0.1.0",
- "day8 0.1.0",
- "day9 0.1.0",
+ "day02 0.1.0",
+ "day03 0.1.0",
+ "day05 0.1.0",
+ "day06 0.1.0",
+ "day07 0.1.0",
+ "day08 0.1.0",
+ "day09 0.1.0",
+ "day10 0.1.0",
 ]
 
 [[package]]
@@ -167,23 +168,23 @@ dependencies = [
 ]
 
 [[package]]
-name = "day2"
+name = "day02"
 version = "0.1.0"
 
 [[package]]
-name = "day3"
+name = "day03"
 version = "0.1.0"
 
 [[package]]
-name = "day5"
+name = "day05"
 version = "0.1.0"
 
 [[package]]
-name = "day6"
+name = "day06"
 version = "0.1.0"
 
 [[package]]
-name = "day7"
+name = "day07"
 version = "0.1.0"
 dependencies = [
  "intcode 0.1.0",
@@ -191,15 +192,19 @@ dependencies = [
 ]
 
 [[package]]
-name = "day8"
+name = "day08"
 version = "0.1.0"
 
 [[package]]
-name = "day9"
+name = "day09"
 version = "0.1.0"
 dependencies = [
  "intcode 0.1.0",
 ]
+
+[[package]]
+name = "day10"
+version = "0.1.0"
 
 [[package]]
 name = "either"
